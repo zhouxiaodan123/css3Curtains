@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>css3卷门帘</title>
+	<meta name="Keywords" content="前端，基础">
+	<meta name="Description" content="欢迎来到web前端基础教室">
+	<style>
+		/*样式初始化：标签默认自带的样式*/
+		body{margin:0;}
+		.wrap{
+			width: 1020px;
+			height:720px;
+			background:#c3c;
+			margin:50px auto 0;
+		}
+		.wrap .wrap-list{
+			width:300px;
+			height:200px;
+			background:#999;
+			border:10px solid #fff;
+			float:left;/*让竖直显示的元素从左到右依次横排展示，如果一行显示不下，就换行*/
+			margin:10px;
+			overflow:hidden;
+		}
+		.wrap .wrap-list .mask{
+			width:300px;
+			height:200px;
+			background:rgb(0,0,0,.5);
+			transform:translateY(-404px);
+			
+		}
+		.wrap .wrap-list:hover .mask{
+			animation: go .9s linear;
+			transform:translateY(-204px);
+		}
+		@keyframes go{
+			0%{
+				transform:translateY(-404px);
+			}
+			50%{
+				transform:translateY(-300px);
+			}
+			65%{
+				transform:translateY(-250px);
+			}
+			82%{
+				transform:translateY(-225px);
+			}
+			92%{
+				transform:translateY(-210px);
+			}
+			55%,75%,87%,97%,100%{
+				transform:translateY(-204px);
+			}
+		}
+	</style>
+</head>
+<body>
+	<!--层 盒子 盒模型 块 划分网站的区域-->
+	<div class="wrap">
+		<div class="wrap-list">
+			<img src="images/1.jpg">
+			<div class="mask"></div>
+		</div>
+		<div class="wrap-list">
+			<img src="images/2.jpg">
+			<div class="mask"></div>
+		</div>
+		<div class="wrap-list">
+			<img src="images/3.jpg">
+			<div class="mask"></div>
+		</div>
+		
+		<div class="wrap-list">
+			<img src="images/4.jpg">
+			<div class="mask"></div>
+		</div>
+		<div class="wrap-list">
+			<img src="images/5.jpg">
+			<div class="mask"></div>
+		</div>
+		<div class="wrap-list">
+			<img src="images/6.jpg">
+			<div class="mask"></div>
+		</div>
+		
+		<div class="wrap-list">
+			<img src="images/7.jpg">
+			<div class="mask"></div>
+		</div>
+		<div class="wrap-list">
+			<img src="images/8.jpg">
+			<div class="mask"></div>
+		</div>
+		<div class="wrap-list">
+			<img src="images/9.jpg">
+			<div class="mask"></div>
+		</div>
+	</div>
+	<!--
+		第一个接触位置移动的属性
+			margin:
+				1.盒子和浏览器之间的间距
+				2.同级或者相邻盒子之间的间距
+		布局：
+			1.整体到局部的整体  培养模块思维
+				大小、位置一定要先选取固定
+			2.添加东西
+		遮罩层动画：
+			1.写遮罩层
+			2.遮罩层跑到图片上边
+				css3的变化：位移
+				为什么不用定位，用位移？
+					定位动画性能很差
+			3.动画：卷帘门 
+				1.动画的动作：鼠标移入  hover
+				2.动画的路径：抖动
+					不断的让遮罩层短距离上下运动
+					animation:自定义动画
+						在规定时间内沿设定的动画路劲运动
+						可以做任何的css动画
+	-->
+</body>
+</html>
