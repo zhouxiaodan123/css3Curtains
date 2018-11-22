@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>canvas漂浮动画</title>
+	<meta name="Keywords" content="前端，基础">
+	<meta name="Description" content="欢迎来到web前端基础教室">
+	<style>
+		body{margin:0;}
+		canvas{
+			display:block;
+		}
+	</style>
+</head>
+<body>
+	<canvas class="bubble"></canvas>
+	<script>
+		/*
+			程序员的能力：
+				1.语言 语法 规则 api ()闭包
+				2.程序思路
+			项目分解为功能模块
+				功能模块分解为程序逻辑单元
+			1.让canvas的可是区域大小与浏览器一致
+				1.1：获取canvas元素
+				1.2：获取浏览器的宽高值
+				1.3：给canvas设置可视区域大小
+				1.4：当浏览器的宽高发生变化时，重新设置canvas的可视区域的宽高
+			2.如何利用canvas绘制图形
+				2.1：找到canvas元素的可绘制区域
+				2.2：在纸上拿起一支笔并蘸上有颜色的墨水
+				2.3：构思如何绘制一个图形（基本参数）
+				2.4：在纸上下笔作画
+			3.如何利用canvas绘制一个动态图形
+				动画？
+				会动的画：
+					1：在短时间内（1s）连续播放多张静态的图形（帧）>=60hz
+						1s之内连续播放60帧
+						1/60s绘制一帧
+						定时器 setInterval(function(){},t)
+						每隔t ms就执行一次函数
+					2：每一张静态的图形内部物体的状态（大小、颜色、位置、形状、角度.....）必须要发生变化
+			4：画520个圆：
+				4.1：大小不一
+				4.2：位置不一
+				4.3：颜色不一
+				4.4：运动方向不一
+				4.5：运动速度不一
+				
+				面向对象编程
+					创造dna生成无数的生物
+					创造程序的dna生成无数的小程序
+					dna->构造函数（第一个字母大写）
+				
+				面向过程编程：
+		*/
+		
+		
+		var oCanvas = document.querySelector('.bubble');//DOM
+		var w,h;
+		var aColor = ['#CCCCCC','#CC99CC','#CC3399','#FFCCCC','#FFFFCC','#FF99CC','#66CC99','#CCFF00'];
+		var aBubble = [];//用来存放生成的520个小球
+		/*
+			canvas元素的宽高和浏览器的大小一致，为什么还会出现滚动条？
+				出现滚动条说明浏览器放不下canvas元素
+				为什么呢？
+					1.canvas元素是行内元素和img很像，能设置宽高
+					2.所有的行内元素皆具备行高属性，行高会导致元素的显示区域大小大于元素本身大小
+				解决方案：
+					1.overflow:hidden;(掩耳盗铃，问题还存在)
+					2.display:block;(将行内元素变成块级元素，)
+		*/
+		//当浏览器的宽高发生变化时，重新设置canvas的可视区域的宽高
+		~~function(){
+			window.onresize = arguments.callee;
+			w = window.innerWidth;//BOM
+			h = window.innerHeight;
+			oCanvas.width = w;//oCanvas.style.width加样式；oCanvas.width加属性；样式是设置元素大小，而属性是设置红色区域大小
+			oCanvas.height = h;
+		}();
+		
+		//2.1：找到canvas元素的可绘制区域
+		var canCon = oCanvas.getContext("2d");
+		
+		//3.如何利用canvas绘制一个动态图形
+		/*var y=233;
+		setInterval(function(){
+			canCon.beginPath();//把笔抬起来
+			canCon.clearRect(0,0,w,h);//擦除canvas的某一区域 矩形区域
+			//2.2：在纸上拿起一支笔并蘸上有颜色的墨水
+			canCon.fillStyle = 'red';
+			//2.3：构思如何绘制一个图形（基本参数）
+			canCon.arc(233,y++,66,0,Math.PI*2);//圆心的坐标 X Y 半径R
+			//2.4：在纸上下笔作画
+			canCon.fill();
+		},1000/60)*/
+		//随机数
+		function random(min,max){
+			return Math.random()*(max-min)+min;
+		}
+		
+		function Bubble(){};//小球球的dna  构造函数
+		
+		Bubble.prototype={//往小球球的dna上添加基因
+			init:function(){
+				this.x = random(0,w);//新生成的小球的x坐标值 0-w
+				this.y = random(0,h);
+				this.r = random(1,3);
+				this.color = aColor[Math.floor(random(0,8))];
+				this.vx = random(-1,1);
+				this.vy = random(-1,1);
+			},
+			draw:function(){
+				canCon.beginPath();//把笔抬起来
+				//2.2：在纸上拿起一支笔并蘸上有颜色的墨水
+				canCon.fillStyle = this.color;
+				//2.3：构思如何绘制一个图形（基本参数）
+				canCon.arc(this.x,this.y,this.r,0,Math.PI*2);//圆心的坐标 X Y 半径R
+				//2.4：在纸上下笔作画
+				canCon.fill();
+			},
+			move:function(){
+				this.x+=this.vx;
+				this.y+=this.vy;
+				if(this.x-this.r<0 || this.x+this.r>w){
+					this.vx=-this.vx;
+				}
+				if(this.y-this.r<0 || this.y+this.r>h){
+					this.vy=-this.vy;
+				}
+				this.draw();
+			}
+		}
+		
+		/*var bubble = new Bubble();//根据dna生成若干个新的小球球
+		bubble.init();
+		bubble.draw();*/
+		
+		
+		function createBubble(num){
+			for(var i=0;i<num;i++){
+				var bubble = new Bubble();//根据dna生成若干个新的小球球
+				bubble.init();
+				bubble.draw();
+				aBubble.push(bubble);
+			}
+		}
+		
+		createBubble(520);
+		
+		setInterval(function(){
+			canCon.clearRect(0,0,w,h);
+			for(var item of aBubble){//for of循环：item变量指的是数组里面的每一个元素
+				item.move();
+			}
+		},1000/60)
+	</script>
+</body>
+</html>
